@@ -1,0 +1,71 @@
+# Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/clients/ui/Dockerfile
+
+name: kubeflow-model-registry-ui
+summary: An image for the User Interface (UI) of Kubeflow Model Registry
+description: An image for the User Interface (UI) of Kubeflow Model Registry
+version: "v0.2.22"
+license: Apache-2.0
+
+base: ubuntu@24.04
+platforms:
+  amd64:
+
+run-user: _daemon_
+
+services:
+  ui:
+    command: /bff
+    override: merge
+    summary: "model registry ui service"
+    startup: enabled
+
+parts:
+  security-team-requirement:
+    plugin: nil
+    override-build: |
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/share/rocks
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
+
+  ui:
+    plugin: nil
+    source: https://github.com/kubeflow/model-registry.git
+    # NOTE: "source-subdir" does not seem to work, but as a workaround "cd" can
+    # be run as the first command of the "override-build" section below
+    # source-subdir: clients/ui/frontend
+    source-tag: v0.2.22
+    source-type: git
+    build-environment:
+    - DEPLOYMENT_MODE: kubeflow
+    - STYLE_THEME: mui-theme
+    # build-snaps:
+    # - node/20/stable
+    override-build: |-
+      cd clients/ui/frontend
+
+      npm cache clean --force
+      npm ci --omit=optional
+      npm run build:prod
+
+      cp -r dist $CRAFT_PART_INSTALL/static/
+
+  bff:
+    plugin: nil
+    source: https://github.com/kubeflow/model-registry.git
+    # NOTE: "source-subdir" does not seem to work, but as a workaround "cd" can
+    # be run as the first command of the "override-build" section below
+    # source-subdir: clients/ui/bff
+    source-tag: v0.2.22
+    source-type: git
+    build-environment:
+    - CGO_ENABLED: "0"
+    - GOARCH: amd64
+    - GOOS: linux
+    build-snaps:
+    - go/1.24/stable
+    override-build: |-
+      cd clients/ui/bff
+
+      go mod download
+      go build -a -o bff ./cmd
+
+      cp bff $CRAFT_PART_INSTALL/bff
