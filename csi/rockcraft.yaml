@@ -1,0 +1,51 @@
+# Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/cmd/csi/Dockerfile.csi
+
+name: kubeflow-model-registry-csi
+summary: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
+description: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
+version: "v0.2.22"
+license: Apache-2.0
+
+base: ubuntu@24.04
+platforms:
+  amd64:
+
+run-user: _daemon_
+
+services:
+  csi:
+    command: /mr-storage-initializer [ whatever-source-storage-uri whatever-destination-local-path ]
+    override: merge
+    summary: "model registry csi service"
+    startup: enabled
+
+parts:
+  security-team-requirement:
+    plugin: nil
+    override-build: |
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/share/rocks
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
+
+  csi:
+    plugin: nil
+    source: https://github.com/kubeflow/model-registry.git
+    source-tag: v0.2.22
+    source-type: git
+    build-environment:
+    - CGO_ENABLED: "0"
+    - GOARCH: amd64
+    - GOOS: linux
+    build-packages:
+    - wget
+    - unzip
+    - openjdk-11-jre-headless
+    build-snaps:
+    - go/1.24/stable
+    - node/18/stable
+    override-build: |-
+      go mod download
+      make deps
+      make clean build/prepare/csi
+      make build/compile/csi
+
+      cp mr-storage-initializer $CRAFT_PART_INSTALL/mr-storage-initializer
