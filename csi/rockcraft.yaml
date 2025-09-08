@@ -32,6 +32,10 @@ parts:
     source: https://github.com/kubeflow/model-registry.git
     source-tag: v0.2.22
     source-type: git
+    overlay-packages:
+      # NOTE: "ca-certificates" not in "stage-packages" because of:
+      # https://github.com/canonical/rockcraft/issues/334
+      - ca-certificates
     build-environment:
     - CGO_ENABLED: "0"
     - GOARCH: amd64
