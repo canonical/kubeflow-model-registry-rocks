@@ -14,10 +14,11 @@ run-user: _daemon_
 
 services:
   csi:
-    command: /mr-storage-initializer [ whatever-source-storage-uri whatever-destination-local-path ]
+    command: /mr-storage-initializer [ ]
     override: merge
     summary: "model registry csi service"
     startup: enabled
+entrypoint-service: csi
 
 parts:
   security-team-requirement:
