@@ -14,10 +14,11 @@ run-user: _daemon_
 
 services:
   server:
-    command: /model-registry
+    command: /model-registry [ ]
     override: merge
     summary: "model registry server service"
     startup: enabled
+entrypoint-service: server
 
 parts:
   security-team-requirement:
