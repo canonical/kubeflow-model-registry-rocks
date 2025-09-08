@@ -38,8 +38,8 @@ parts:
     build-environment:
     - DEPLOYMENT_MODE: kubeflow
     - STYLE_THEME: mui-theme
-    # build-snaps:
-    # - node/20/stable
+    build-snaps:
+    - node/20/stable
     override-build: |-
       cd clients/ui/frontend
 
