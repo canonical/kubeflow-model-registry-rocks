@@ -14,10 +14,11 @@ run-user: _daemon_
 
 services:
   ui:
-    command: /bff
+    command: /bff [ ]
     override: merge
     summary: "model registry ui service"
     startup: enabled
+entrypoint-service: ui
 
 parts:
   security-team-requirement:
