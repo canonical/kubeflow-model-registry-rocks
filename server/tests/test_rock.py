@@ -14,18 +14,17 @@ def test_rock():
     rock_version = check_rock.get_version()
     LOCAL_ROCK_IMAGE = f"{rock_image}:{rock_version}"
 
-    # assert the rock contains the expected files
-    for image_subdir_path in ["/model-registry"]:
-        subprocess.run(
-            [
-                "docker",
-                "run",
-                "--rm",
-                "--entrypoint",
-                "/bin/bash",
-                LOCAL_ROCK_IMAGE,
-                "-c",
-                f"ls -la {image_subdir_path}",
-            ],
-            check=True,
-        )
+    # assert the rock contains the expected executable:
+    subprocess.run(
+        [
+            "docker",
+            "run",
+            "--rm",
+            "--entrypoint",
+            "/bin/bash",
+            LOCAL_ROCK_IMAGE,
+            "-c",
+            "ls -la /model-registry",
+        ],
+        check=True,
+    )
