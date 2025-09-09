@@ -15,7 +15,7 @@ run-user: _daemon_
 services:
   ui:
     command: /bff [ arguments ]
-    override: merge
+    override: replace
     summary: "model registry ui service"
     startup: enabled
 entrypoint-service: ui
