@@ -3,7 +3,7 @@
 name: kubeflow-model-registry-csi
 summary: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
 description: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
-version: "v0.2.22"
+version: "0.2.22"
 license: Apache-2.0
 
 base: ubuntu@24.04
