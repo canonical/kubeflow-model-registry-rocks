@@ -14,7 +14,7 @@ run-user: _daemon_
 
 services:
   csi:
-    command: /mr-storage-initializer [ ]
+    command: /mr-storage-initializer [ arguments ]
     override: merge
     summary: "model registry csi service"
     startup: enabled
