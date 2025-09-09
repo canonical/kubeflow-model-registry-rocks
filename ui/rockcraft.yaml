@@ -14,7 +14,7 @@ run-user: _daemon_
 
 services:
   ui:
-    command: /bff [ ]
+    command: /bff [ arguments ]
     override: merge
     summary: "model registry ui service"
     startup: enabled
