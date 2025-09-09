@@ -14,7 +14,7 @@ def test_rock():
     rock_version = check_rock.get_version()
     LOCAL_ROCK_IMAGE = f"{rock_image}:{rock_version}"
 
-    # assert the rock contains the expected files
+    # assert the rock contains the expected files and folders:
     for image_subdir_path in ["/bff", "/static"]:
         subprocess.run(
             [
