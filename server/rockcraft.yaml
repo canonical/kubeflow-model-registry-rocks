@@ -14,7 +14,7 @@ run-user: _daemon_
 
 services:
   server:
-    command: /model-registry [ ]
+    command: /model-registry [ arguments ]
     override: merge
     summary: "model registry server service"
     startup: enabled
