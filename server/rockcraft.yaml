@@ -15,7 +15,7 @@ run-user: _daemon_
 services:
   server:
     command: /model-registry [ arguments ]
-    override: merge
+    override: replace
     summary: "model registry server service"
     startup: enabled
 entrypoint-service: server
