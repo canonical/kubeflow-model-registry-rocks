@@ -14,7 +14,12 @@ run-user: _daemon_
 
 services:
   server:
-    command: /model-registry [ arguments ]
+    command: "/model-registry [
+        --hostname=0.0.0.0
+        --port=$(MODEL_REGISTRY_REST_SERVICE_PORT)
+        --datastore-type=$(MODEL_REGISTRY_DATA_STORE_TYPE)
+        --embedmd-database-dsn=$(MYSQL_USER_NAME):$(MYSQL_ROOT_PASSWORD)@tcp(model-registry-db:$(MYSQL_PORT))/$(MYSQL_DATABASE)?charset=utf8mb4
+      ]"
     override: replace
     summary: "model registry server service"
     startup: enabled
