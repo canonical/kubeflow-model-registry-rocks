@@ -1,6 +1,6 @@
 # Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/Dockerfile
 
-name: kubeflow-model-registry-server
+name: model-registry-server
 summary: An image for the server of Kubeflow Model Registry
 description: An image for the server of Kubeflow Model Registry
 version: "0.2.22"
