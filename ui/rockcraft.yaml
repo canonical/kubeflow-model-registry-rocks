@@ -1,6 +1,6 @@
 # Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/clients/ui/Dockerfile
 
-name: kubeflow-model-registry-ui
+name: model-registry-ui
 summary: An image for the User Interface (UI) of Kubeflow Model Registry
 description: An image for the User Interface (UI) of Kubeflow Model Registry
 version: "0.2.22"
