@@ -1,5 +1,0 @@
-integrations:
-- consumer-repository: https://github.com/canonical/model-registry-operators.git
-  replace-image:
-    - file: charms/server/metadata.yaml
-      path: resources.oci-image.upstream-source
