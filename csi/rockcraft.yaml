@@ -1,6 +1,6 @@
 # Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/cmd/csi/Dockerfile.csi
 
-name: model-registry-csi
+name: model-registry-storage-initializer
 summary: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
 description: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
 version: "0.2.22"
