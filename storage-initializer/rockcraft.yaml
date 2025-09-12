@@ -46,7 +46,7 @@ parts:
     - GOOS: linux
     build-packages:
     # ------
-    # necessary for inned build command steps, failing otherwise:
+    # necessary for inner build command steps, failing otherwise:
     - wget
     - unzip
     # ------
