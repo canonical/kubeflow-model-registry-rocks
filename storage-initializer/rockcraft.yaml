@@ -45,8 +45,11 @@ parts:
     - GOARCH: amd64
     - GOOS: linux
     build-packages:
+    # ------
+    # necessary for inned build command steps, failing otherwise:
     - wget
     - unzip
+    # ------
     - openjdk-11-jre-headless
     build-snaps:
     - go/1.24/stable
