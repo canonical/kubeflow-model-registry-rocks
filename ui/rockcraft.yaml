@@ -31,7 +31,8 @@ parts:
     plugin: nil
     source: https://github.com/kubeflow/model-registry.git
     # NOTE: "source-subdir" does not seem to work, but as a workaround "cd" can
-    # be run as the first command of the "override-build" section below
+    # be run as the first command of the "override-build" section below, see
+    # https://github.com/canonical/rockcraft/issues/967
     # source-subdir: clients/ui/frontend
     source-tag: v0.2.22
     source-type: git
@@ -53,7 +54,8 @@ parts:
     plugin: nil
     source: https://github.com/kubeflow/model-registry.git
     # NOTE: "source-subdir" does not seem to work, but as a workaround "cd" can
-    # be run as the first command of the "override-build" section below
+    # be run as the first command of the "override-build" section below, see
+    # https://github.com/canonical/rockcraft/issues/967
     # source-subdir: clients/ui/bff
     source-tag: v0.2.22
     source-type: git
