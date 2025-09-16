@@ -14,7 +14,7 @@ run-user: _daemon_
 
 services:
   ui:
-    command: /bff [ --deployment-mode=kubeflow --port=8080 ]
+    command: /bff [ dummy-arguments ]
     override: replace
     summary: "model registry ui service"
     startup: enabled
