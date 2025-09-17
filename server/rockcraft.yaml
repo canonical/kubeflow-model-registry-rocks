@@ -1,0 +1,45 @@
+# Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/Dockerfile
+
+name: model-registry-server
+summary: An image for the server of Kubeflow Model Registry
+description: An image for the server of Kubeflow Model Registry
+version: "0.2.22"
+license: Apache-2.0
+
+base: ubuntu@24.04
+platforms:
+  amd64:
+
+run-user: _daemon_
+
+services:
+  server:
+    command: /model-registry [ dummy-arguments ]
+    override: replace
+    summary: "model registry server service"
+    startup: enabled
+entrypoint-service: server
+
+parts:
+  security-team-requirement:
+    plugin: nil
+    override-build: |
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/share/rocks
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
+
+  server:
+    plugin: nil
+    source: https://github.com/kubeflow/model-registry.git
+    source-tag: v0.2.22
+    source-type: git
+    build-environment:
+    - CGO_ENABLED: "0"
+    - GOARCH: amd64
+    - GOOS: linux
+    build-snaps:
+    - go/1.24/stable
+    override-build: |-
+      go mod download
+      make build/compile
+
+      cp model-registry $CRAFT_PART_INSTALL/model-registry
