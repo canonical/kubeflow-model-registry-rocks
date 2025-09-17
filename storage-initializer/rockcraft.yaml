@@ -1,0 +1,63 @@
+# Dockerfile: https://github.com/kubeflow/model-registry/blob/v0.2.22/cmd/csi/Dockerfile.csi
+
+name: model-registry-storage-initializer
+summary: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
+description: An image for the Custom Storage Initializer (CSI) of Kubeflow Model Registry
+version: "0.2.22"
+license: Apache-2.0
+
+base: ubuntu@24.04
+platforms:
+  amd64:
+
+run-user: _daemon_
+
+services:
+  csi:
+    command: /mr-storage-initializer [ dummy-arguments ]
+    override: replace
+    summary: "model registry csi service"
+    startup: enabled
+    # NOTE: the CSI logic is supposed to be run only as an init-container that
+    # downloads the served model once and for all, not rerunning indefinitely:
+    on-success: shutdown
+    on-failure: shutdown
+entrypoint-service: csi
+
+parts:
+  security-team-requirement:
+    plugin: nil
+    override-build: |
+      mkdir -p ${CRAFT_PART_INSTALL}/usr/share/rocks
+      (echo "# os-release" && cat /etc/os-release && echo "# dpkg-query" && dpkg-query -f '${db:Status-Abbrev},${binary:Package},${Version},${source:Package},${Source:Version}\n' -W) > ${CRAFT_PART_INSTALL}/usr/share/rocks/dpkg.query
+
+  csi:
+    plugin: nil
+    source: https://github.com/kubeflow/model-registry.git
+    source-tag: v0.2.22
+    source-type: git
+    overlay-packages:
+      # NOTE: "ca-certificates" not in "stage-packages" because of:
+      # https://github.com/canonical/rockcraft/issues/334
+      - ca-certificates
+    build-environment:
+    - CGO_ENABLED: "0"
+    - GOARCH: amd64
+    - GOOS: linux
+    build-packages:
+    # ------
+    # necessary for inner build command steps, failing otherwise:
+    - wget
+    - unzip
+    # ------
+    - openjdk-11-jre-headless
+    build-snaps:
+    - go/1.24/stable
+    - node/18/stable
+    override-build: |-
+      go mod download
+      make deps
+      make clean build/prepare/csi
+      make build/compile/csi
+
+      cp mr-storage-initializer $CRAFT_PART_INSTALL/mr-storage-initializer
