@@ -1,1 +1,7 @@
 **.rock
+
+__pycache__
+
+.tox
+
+venv
